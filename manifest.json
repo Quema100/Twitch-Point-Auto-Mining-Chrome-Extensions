@@ -3,6 +3,10 @@
     "name" : "point",
     "description" :"extensions by Quema",
     "version" : "0.1",
+    "permissions": [
+        "tabs",
+        "activeTab"
+    ],
     "content_scripts" : [
         {
             "matches" : ["<all_urls>"],
