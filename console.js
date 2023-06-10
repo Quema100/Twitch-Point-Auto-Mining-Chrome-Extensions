@@ -1,9 +1,7 @@
 function tab() {
     if (chrome.tabs) {
-      chrome.tabs.query({ active: true }, function(tabs) {
-        console.log(tabs)
+      chrome.tabs.query({ active: true , url: "https://www.twitch.tv/*" }, function(tabs) {
         tabs.forEach(function (tabs2) { () => {
-            console.log(tabs2)
             chrome.tabs.executeScript(tabs2.id, { code: `(${click})();` });
         }
        });
@@ -22,9 +20,11 @@ function window(){
       windows.forEach( (window) => {
         chrome.windows.update(window.id, { focused: true },  () => {
           chrome.tabs.query({ windowId: window.id, url: "https://www.twitch.tv/*" }, (tabs) => {
-            tabs.forEach( (tab) => {
-              chrome.tabs.update(tab.id, { active: true });
-            });
+            tabs.forEach( (tab)=> {
+              if (tab.index >= 0 && tab.index < window.tabs.length) {
+                chrome.tabs.update(tab.id, { active: true });
+              }
+            })
           });
         });
       });
