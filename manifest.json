@@ -3,10 +3,16 @@
     "name" : "point",
     "description" :"extensions by Quema",
     "version" : "0.1",
-    "permissions": [
+    "permissions" : [
         "tabs",
         "activeTab"
     ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "background": {
+        "service_worker": "console.js"
+    },
     "content_scripts" : [
         {
             "matches" : ["<all_urls>"],

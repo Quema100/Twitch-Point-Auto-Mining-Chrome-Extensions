@@ -11,19 +11,6 @@ function click (){
     }
 }
 
-function tab(){
-  chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    if (message.action === 'executeScript') {
-      chrome.tabs.query({ active: true }, function (tabs) {
-        tabs.forEach(function (tab) {
-          chrome.tabs.executeScript(tab.id, { code: `(${click})();` });
-        });
-      });
-    }
-  });
-}
-
 setInterval(()=>{
-    tab()
     click ()
 },1000)
