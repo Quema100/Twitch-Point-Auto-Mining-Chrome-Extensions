@@ -1,4 +1,4 @@
-function tab() {
+function nowtab() {
   if (chrome.tabs) {
     chrome.tabs.query({ url: "https://www.twitch.tv/*" }, function(tabs) {
       for (let i = 0; i < tabs.length; i++) {
@@ -7,7 +7,7 @@ function tab() {
             // Error occurred, retry after a short delay
             console.error(chrome.runtime.lastError.message);
             setTimeout(function() {
-              tab(); // Retry the tab activation
+              nowtab(); // Retry the tab activation
             }, 1000); // Delay in milliseconds (adjust as needed)
           } else {
             console.log("Tab activated:", tab);
@@ -21,5 +21,5 @@ function tab() {
 }
 
 setInterval(() => {
-  tab();
+  nowtab();
 }, 1000);
