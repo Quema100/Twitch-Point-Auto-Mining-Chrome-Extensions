@@ -1,12 +1,16 @@
-chrome.runtime.onInstalled.addListener(function() {
-  chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-    if (message.action === "click") {
-      chrome.tabs.sendMessage(sender.tab.id, { action: "performClick" });
-    }
-  });
-  
-  // 확인을 위한 콘솔 메시지 출력
-  setInterval(function() {
-    console.log("확장 프로그램이 작동 중입니다.");
-  }, 1000); // 5초마다 메시지 출력
-});
+function tab() {
+  if (chrome.tabs) {
+    chrome.tabs.query({ url: "https://www.twitch.tv/*" }, function(tabs) {
+      tabs.forEach(function () { (tabs2) => {
+           console.log(tabs2)
+          chrome.tabs.executeScript(tabs2.id, { code: `(${click})();` });
+        }
+      });
+     })
+  } else {
+    console.error("chrome.tabs API가 로드되지 않았습니다.");
+  }
+}
+setInterval(()=>{
+  tab()
+},1000)
