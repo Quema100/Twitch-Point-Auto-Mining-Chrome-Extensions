@@ -1,16 +1,25 @@
 function tab() {
   if (chrome.tabs) {
     chrome.tabs.query({ url: "https://www.twitch.tv/*" }, function(tabs) {
-      tabs.forEach(function () { (tabs2) => {
-           console.log(tabs2)
-          chrome.tabs.executeScript(tabs2.id, { code: `(${click})();` });
-        }
-      });
-     })
+      for (let i = 0; i < tabs.length; i++) {
+        chrome.tabs.update(tabs[i].id, { active: true }, function(tab) {
+          if (chrome.runtime.lastError) {
+            // Error occurred, retry after a short delay
+            console.error(chrome.runtime.lastError.message);
+            setTimeout(function() {
+              tab(); // Retry the tab activation
+            }, 1000); // Delay in milliseconds (adjust as needed)
+          } else {
+            console.log("Tab activated:", tab);
+          }
+        });
+      }
+    });
   } else {
     console.error("chrome.tabs API가 로드되지 않았습니다.");
   }
 }
-setInterval(()=>{
-  tab()
-},1000)
+
+setInterval(() => {
+  tab();
+}, 1000);
