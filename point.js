@@ -10,3 +10,7 @@ function click (){
         targetElementko.click();
     }
 }
+
+setInterval(()=>{
+    click ()
+},1000)
