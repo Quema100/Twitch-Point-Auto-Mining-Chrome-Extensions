@@ -28,7 +28,7 @@ function activateAllTabs() {
         index = 0; // Reset index for the next iteration
       }
 
-      setTimeout(activateNextTab, 4000); // Delay before activating the next tab
+      setTimeout(activateNextTab, 10000); // Delay before activating the next tab
     }
 
     activateNextTab();
