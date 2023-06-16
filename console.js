@@ -3,48 +3,46 @@ function activateAllTabs() {
     let index = 0;
 
     function activateNextTab() {
-      console.log(tabs.length)
-      if (index < tabs.length) {
-        const tab = tabs[index];
-        if (!tab.active && !tab.discarded) {
-          chrome.tabs.get(tab.id, function(existingTab) {
-            if (chrome.runtime.lastError || !existingTab) {
-                activateAllTabs()
-            } else {
-              chrome.tabs.update(existingTab.id, { active: true }, function(updatedTab) {
-                if (chrome.runtime.lastError) {
-                  setTimeout(() => {
-                    activateAllTabs()
-                  },2000)
-                } else {
-                  console.log("Tab activated:", updatedTab);
-                  setTimeout(() => {
-                    index++; // Move to the next tab
-                  },2000)
+      setTimeout(() => {
+        if (index < tabs.length) {
+          const tab = tabs[index];
+          if (!tab.active && !tab.discarded) {
+            chrome.tabs.get(tab.id, function(existingTab) {
+              if (chrome.runtime.lastError || !existingTab) {
+                activateAllTabs();
+              } else {
+                chrome.tabs.update(existingTab.id, { active: true }, function(updatedTab) {
+                  if (chrome.runtime.lastError) {
+                    activateAllTabs();
+                  } else {
+                    console.log("Tab activated:", updatedTab);
                   }
                 });
-            }
-          });
-        }
-      }
+              }
+            });
+          }
+          index++; // Move to the next tab
+        }  
+      },5000)
 
       if (index >= tabs.length) {
         // All tabs have been processed
         index = 0; // Reset index for the next iteration
       }
 
-      setTimeout(activateNextTab, 5000); // Delay before activating the next tab
+      setTimeout(activateNextTab, 7000); // Delay before activating the next tab
     }
-    setTimeout(activateNextTab, 5000); // Delay before activating the next tab
+
+    activateNextTab();
   });
 }
 
-setTimeout(activateAllTabs, 3000); // 최초 접속 시 작동
+activateAllTabs(); // 최초 접속 시 작동
 
 // 탭의 상태 변경을 감지하여 처리
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   if (changeInfo.status === "complete" && tab.url.startsWith("https://www.twitch.tv/")) {
-    setTimeout(activateAllTabs, 2000);
+    setTimeout(activateAllTabs, 7000);
   }
 });
 
@@ -54,7 +52,7 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
     const removedTab = tabs.find(tab => tab.id === tabId);
     if (!removedTab) {
       // Tab is no longer present, adjust the loop
-      activateAllTabs();
+      setTimeout(activateAllTabs, 7000);
     }
   });
 });
