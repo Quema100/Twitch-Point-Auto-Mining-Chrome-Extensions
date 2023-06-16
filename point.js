@@ -13,4 +13,4 @@ function click (){
 
 setInterval(()=>{
   click ()
-},1)
+},1000)
