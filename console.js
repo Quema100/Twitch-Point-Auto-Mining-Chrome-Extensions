@@ -14,7 +14,7 @@ function activateAllTabs() {
         if (!tab.active && !tab.discarded) {
           chrome.tabs.update(tab.id, { active: true }, function(updatedTab) {
             if (chrome.runtime.lastError) {
-              setTimeout(activateNextTab, 5000); // 5초 딜레이 후 다음 탭 활성화
+              setTimeout(activateAllTabs, 5000); // 5초 딜레이 후 다음 탭 활성화
             } else {
               console.log("Tab activated:", updatedTab);
             }
