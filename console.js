@@ -3,10 +3,10 @@ let isActivated = false; // 변수 추가
 function activateAllTabs() {
   if (isActivated) return; // 이미 작동 중인 경우 중복 실행 방지
 
-  isActivated = true; // 작동 플래그 설정
-
   chrome.tabs.query({ url: "https://www.twitch.tv/*" }, function(tabs) {
     let index = 0;
+    
+    isActivated = true; // 작동 플래그 설정
 
     function activateNextTab() {
       if (index < tabs.length) {
@@ -41,7 +41,7 @@ activateAllTabs(); // 최초 접속 시 작동
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   if (changeInfo.status === "complete" && tab.url.startsWith("https://www.twitch.tv/")) {
-    setTimeout(activateAllTabs, 7000); // Delay before activating tabs after an update
+    setTimeout(activateAllTabs, 5000); // Delay before activating tabs after an update
     console.log('업데이트')
   }
 });
@@ -51,7 +51,13 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
     // Check if the removed tab is included in the current tabs list
     const removedTab = tabs.find(tab => tab.id === tabId);
     if (!removedTab) {
-      setTimeout(activateAllTabs, 7000); // Delay before activating tabs after a tab removal
+      setTimeout(activateAllTabs, 5000); // Delay before activating tabs after a tab removal
     }
   });
+});
+
+chrome.tabs.onCreated.addListener(function(tab) {
+  if (tab.url && tab.url.startsWith("https://www.twitch.tv/")) {
+    setTimeout(activateAllTabs, 5000); // 새 탭이 생성된 후 5초 지연 후 activateAllTabs 함수 실행
+  }
 });
